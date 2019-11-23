@@ -1,0 +1,4 @@
+
+cp -rf ../1_develop/catkin_ws/src/pp/packages/lane_pp lane_pp
+dts challenges evaluate --challenge aido3-LF-sim-validation
+

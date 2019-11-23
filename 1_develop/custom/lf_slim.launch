@@ -50,14 +50,32 @@
         </group>
 
         <!-- Lane controller -->
-        <group if="$(arg /lane_following/lane_controller)">
-            <remap from="lane_controller_node/lane_pose" to="lane_filter_node/lane_pose"/>
-            <remap from="lane_controller_node/wheels_cmd_executed" to="wheels_driver_node/wheels_cmd_executed" />
-            <remap from="lane_controller_node/actuator_limits" to="inverse_kinematics_node/actuator_limits" />
-            <include file="$(find lane_control)/launch/lane_controller_node.launch">
-                <arg name="veh" value="$(arg veh)"/>
-                <!-- <arg name="param_file_name" value="$(arg param_file_name)"/> -->
-            </include>
+	<group>
+
+		<remap from="lane_pp_node/lane_pose" to="lane_filter_node/lane_pose"/>
+		<remap from="lane_pp_node/seglist_filtered" to="lane_filter_node/seglist_filtered"/>
+		<remap from="lane_pp_node/lineseglist_out" to="ground_projection/lineseglist_out"/>
+		<remap from="lane_pp_node/wheels_cmd_executed" to="wheels_driver_node/wheels_cmd_executed" />
+		<remap from="lane_pp_node/fsm_mode" to="fsm_node/mode" />
+		<remap from="lane_pp_node/obstacle_avoidance_pose" to="obst_avoid/obstacle_avoidance_pose" />
+		<remap from="lane_pp_node/obstacle_detected" to="obstacle_avoidance_node/obstacle_avoidance_active_flag" />
+		<remap from="lane_pp_node/stop_line_reading" to="stop_line_filter_node/stop_line_reading" />
+		<remap from="wheels_driver_node/radius_limit" to="lane_pp_node/radius_limit" />
+
+		<remap from="lane_pp_node/actuator_limits" to="lane_controller_node/actuator_limits" />
+		<remap from="lane_pp_node/actuator_limits_received" to="lane_controller_node/actuator_limits_received" />       
+		<remap from="lane_pp_node/car_cmd" to="lane_controller_node/car_cmd" />
+		<remap from="lane_pp_node/intersection_navigation_pose" to="lane_controller_node/intersection_navigation_pose" />
+		<remap from="lane_pp_node/switch" to="lane_controller_node/switch" />
+
+
+
+
+		<include file="$(find lane_pp)/launch/lane_pp_node.launch">
+			<arg name="veh" value="$(arg veh)"/>
+			<arg name="param_file_name" value="default"/>
+		</include>	        
+
         </group>
 
 	<group if="$(arg visualization)">
